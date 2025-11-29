@@ -21,5 +21,13 @@ class IssueReport(models.Model):
     resolved_at = models.DateTimeField(null=True, blank=True)
     image_after = models.ImageField(upload_to='issues/after/', null=True, blank=True)
 
+    # --- NEW ADDITION: UPVOTES ---
+    # This stores a list of Users who liked this report
+    upvotes = models.ManyToManyField(User, related_name='upvoted_reports', blank=True)
+
     def __str__(self):
         return f"{self.description[:20]} - {self.status}"
+    
+    # Helper to count total votes
+    def total_upvotes(self):
+        return self.upvotes.count()

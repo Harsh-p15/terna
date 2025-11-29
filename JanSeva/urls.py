@@ -1,15 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import redirect
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('home/', include('home.urls')),
     
-    # --- THIS LINE IS CRITICAL ---
-    # It tells Django: "Send any link starting with 'api/home/' to the home app"
-    path('api/home/', include('home.urls')),
-    # -----------------------------
+    # CHANGE THIS LINE: Redirect root '' to 'home/login/'
+    path('', lambda request: redirect('home/login/', permanent=False)),
 ]
 
 if settings.DEBUG:

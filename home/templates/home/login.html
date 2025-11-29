@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JanSeva Login</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #667eea; }
+        .card { background: white; padding: 30px; border-radius: 10px; width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>JanSeva Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="msg" style="color:red;"></p>
+    </div>
+
+    <script>
+        async function login() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+
+            // 1. Call Django REST API
+            const res = await fetch('/home/api/login/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+
+            // 2. Handle Response
+            const data = await res.json();
+            
+            if (res.ok) {
+                // SAVE TOKEN in Browser
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('is_admin', data.is_admin);
+                window.location.href = "/home/dashboard/"; // Go to home
+            } else {
+                document.getElementById('msg').innerText = "Invalid Credentials";
+            }
+        }
+    </script>
+</body>
+</html>

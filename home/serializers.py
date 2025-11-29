@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import IssueReport
 
-# --- 1. Serializer for User Registration (Signup) ---
+# 1. Signup Serializer
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -18,21 +18,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         )
         return user
 
-# --- 2. Serializer for Reports (The Missing Part!) ---
+# 2. Report Serializer
 class IssueReportSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
-    resolved_at = serializers.DateTimeField(read_only=True)
     date_reported = serializers.DateTimeField(source='created_at', read_only=True)
 
     class Meta:
         model = IssueReport
-        fields = [
-            'id', 
-            'image_before', 
-            'description', 
-            'latitude', 
-            'longitude', 
-            'status', 
-            'resolved_at', 
-            'date_reported'
-        ]
+        fields = ['id', 'image_before', 'description', 'latitude', 'longitude', 'status', 'date_reported']

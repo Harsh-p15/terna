@@ -1,16 +1,18 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import IssueReportViewSet, CustomLoginView, CitizenRegisterView
+from . import views
 
+# API Router
 router = DefaultRouter()
-router.register(r'reports', IssueReportViewSet, basename='user-reports')
+router.register(r'reports', views.IssueReportViewSet, basename='reports')
 
 urlpatterns = [
-    # React hits: /api/home/login/
-    path('login/', CustomLoginView.as_view(), name='api_login'),
-    
-    # React hits: /api/home/register/
-    path('register/', CitizenRegisterView.as_view(), name='api_register'),
-    
-    path('', include(router.urls)),
+    # --- HTML PAGES (Frontend) ---
+    path('login/', views.login_page, name='page_login'),
+    path('dashboard/', views.dashboard_page, name='page_dashboard'),
+
+    # --- API ENDPOINTS (Backend) ---
+    path('api/login/', views.CustomLoginView.as_view()),
+    path('api/register/', views.CitizenRegisterView.as_view()),
+    path('api/', include(router.urls)),
 ]
